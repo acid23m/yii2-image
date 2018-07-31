@@ -1,0 +1,40 @@
+{
+  "name": "acid23m/yii2-image",
+  "description": "Image module for my dockerized Yii2 application.",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension",
+    "admin",
+    "image"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sergey P",
+      "email": "webmaster.cipa@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "~2.0.15.1",
+    "intervention/image": "~2.4",
+    "ps/image-optimizer": "~1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "imagetool\\": "src"
+    }
+  },
+  "config": {
+    "process-timeout": 1800,
+    "fxp-asset": {
+      "enabled": false
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
+}
