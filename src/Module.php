@@ -8,7 +8,7 @@
 
 namespace imagetool;
 
-use yii\base\BootstrapInterface;
+use yii\helpers\FileHelper;
 
 /**
  * Class Module.
@@ -16,23 +16,24 @@ use yii\base\BootstrapInterface;
  * @package imagetool
  * @author Poyarkov S. <webmaster.cipa at gmail dot com>
  */
-final class Module extends \yii\base\Module implements BootstrapInterface
+final class Module extends \yii\base\Module
 {
+    public const STORAGE_PATH = '@root/userdata/images';
+
     /**
      * @inheritdoc
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidArgumentException
      */
     public function init(): void
     {
         parent::init();
-    }
 
-    /**
-     * @inheritdoc
-     * @param \yii\web\Application|\yii\console\Application $app
-     */
-    public function bootstrap($app): void
-    {
-
+        // init storage
+        $storage_path = \Yii::getAlias(self::STORAGE_PATH);
+        if (!file_exists($storage_path)) {
+            FileHelper::createDirectory($storage_path);
+        }
     }
 
 }

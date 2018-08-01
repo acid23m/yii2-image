@@ -1,6 +1,6 @@
-Admin
+Image
 =====
-Admin module for my dockerized Yii2 application.
+Image module for my dockerized Yii2 application.
 
 Installation
 ------------
@@ -9,7 +9,7 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 Either run
 
-```
+```bash
 php composer.phar require --prefer-dist acid23m/yii2-image "dev-master"
 ```
 
@@ -26,3 +26,18 @@ Usage
 -----
 
 Once the extension is installed, do next:
+
+- Storage path is not editable - *@root/userdata/images*.
+Add *userdata/* to **.gitignore**.
+
+
+- Add module in *backend/config/main.php* and *frontend/config/main.php*.
+
+```php
+'modules' => [
+    'imagetool' => [
+        'class' => \imagetool\Module::class,
+        'controllerNamespace' => 'imagetool\controllers\web'
+    ]
+]
+```
