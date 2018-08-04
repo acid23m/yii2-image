@@ -26,14 +26,17 @@ use yii\web\View;
  */
 class DataController extends Controller
 {
+    protected const CACHE_TIME = 86400;
+
     /**
      * Show image.
      * @param string $filename
      * @return null|string|View
+     * @throws InvalidArgumentException
      * @throws NotFoundHttpException
      * @throws UnsupportedMediaTypeHttpException
      * @throws \ImageOptimizer\Exception\Exception
-     * @throws InvalidArgumentException
+     * @throws \Intervention\Image\Exception\NotWritableException
      */
     public function actionView($filename)
     {
@@ -52,6 +55,11 @@ class DataController extends Controller
         $mime = $image->getManager()->mime();
         if ($mime === '' || $mime === null) {
             throw new UnsupportedMediaTypeHttpException('Can\'t find mime type by given extension.');
+        }
+
+        $extension = $image->getManager()->extension;
+        if ($extension === 'jpeg') {
+            $extension = Image::FORMAT_JPG;
         }
 
         $size = (int) $image->getManager()->filesize();
@@ -77,11 +85,13 @@ class DataController extends Controller
 
         $response->format = Response::FORMAT_RAW;
         $response->getHeaders()->set('Content-Type', $mime);
-        $response->getHeaders()->set('Content-Length', $size);
+//        $response->getHeaders()->set('Content-Length', $size); // wrong because of gzip
         $response->getHeaders()->set('Last-Modified', gmdate(DATE_RFC7231, $mtime));
-        $response->getHeaders()->set('Cache-Control', 'private, max-age=86400, must-revalidate');
+        $response->getHeaders()->set('Cache-Control', 'public, max-age=' . static::CACHE_TIME . ', must-revalidate');
+        $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + static::CACHE_TIME));
+        $response->getHeaders()->remove('Pragma');
 
-        return (string) $image->getManager();
+        return (string) $image->encode($extension);
     }
 
 }

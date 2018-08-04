@@ -25,8 +25,11 @@ class Bootstrap implements BootstrapInterface
     public function bootstrap($app): void
     {
         if ($app instanceof \yii\web\Application) {
+            $module = \imagetool\Module::getInstance();
+            $module_id = $module !== null ? $module->id : \imagetool\Module::DEFAULT_ID;
+
             $app->getUrlManager()->addRules([
-                'data/view/<filename>' => 'data/view'
+                'image-data/<filename>' => "$module_id/data/view"
             ], false);
         }
     }

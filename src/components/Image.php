@@ -209,11 +209,7 @@ class Image extends Component
 
         unlink($image_save_file);
 
-        if ($format === static::FORMAT_DATA_URI) {
-            return (string) $image->encode($format);
-        }
-
-        return (string) $image;
+        return (string) $image->encode($format);
     }
 
 }

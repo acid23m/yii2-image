@@ -18,6 +18,7 @@ use yii\helpers\FileHelper;
  */
 final class Module extends \yii\base\Module
 {
+    public const DEFAULT_ID = 'imagetool';
     public const STORAGE_PATH = '@root/userdata/images';
 
     /**

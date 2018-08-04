@@ -31,7 +31,7 @@ Once the extension is installed, do next:
 Add *userdata/* to **.gitignore**.
 
 
-- Add module in *backend/config/main.php* and *frontend/config/main.php*.
+- Add module (recommended id is *imagetool*) in *backend/config/main.php* and *frontend/config/main.php*.
 
 ```php
 'modules' => [

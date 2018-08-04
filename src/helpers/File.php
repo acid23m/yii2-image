@@ -53,11 +53,11 @@ class File
      */
     public static function getUrl(string $filename): string
     {
-        $imagetool = \imagetool\Module::getInstance() === null
-            ? ''
-            : \imagetool\Module::getInstance()->id;
+//        $module = \imagetool\Module::getInstance();
+//        $module_id = $module !== null ? $module->id : 'imagetool';
 
-        return Url::to(["$imagetool/data/view", 'filename' => $filename]);
+//        return Url::to(["$module_id/data/view", 'filename' => $filename]);
+        return Url::to("@web/image-data/$filename");
     }
 
 }
