@@ -26,7 +26,7 @@
     }
   },
   "extra": {
-    "bootstrap": "imagetool\\Module"
+    "bootstrap": "imagetool\\Bootstrap"
   },
   "config": {
     "process-timeout": 1800,
