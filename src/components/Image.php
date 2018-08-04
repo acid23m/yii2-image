@@ -10,6 +10,7 @@ namespace imagetool\components;
 
 use ImageOptimizer\Optimizer;
 use ImageOptimizer\OptimizerFactory;
+use imagetool\helpers\File;
 use Intervention\Image\Constraint;
 use Intervention\Image\Exception\NotWritableException;
 use Intervention\Image\Image as ImageLib;
@@ -119,25 +120,12 @@ class Image extends Component
     }
 
     /**
-     * 2 level directories for image file without heading and trailing slashes based on filename.
-     * @param string $filename
-     * @return string
-     */
-    public static function defineDir(string $filename): string
-    {
-        $dir_1 = $filename[0] . $filename[1];
-        $dir_2 = $filename[2] . $filename[3];
-
-        return $dir_1 . '/' . $dir_2;
-    }
-
-    /**
      * 2 level directories for image file without heading and trailing slashes.
      * @return string Directories
      */
     public function getDir(): string
     {
-        return static::defineDir($this->getName());
+        return File::defineDir($this->getName());
     }
 
     /**

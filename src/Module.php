@@ -8,6 +8,7 @@
 
 namespace imagetool;
 
+use yii\base\BootstrapInterface;
 use yii\helpers\FileHelper;
 
 /**
@@ -16,7 +17,7 @@ use yii\helpers\FileHelper;
  * @package imagetool
  * @author Poyarkov S. <webmaster.cipa at gmail dot com>
  */
-final class Module extends \yii\base\Module
+final class Module extends \yii\base\Module implements BootstrapInterface
 {
     public const STORAGE_PATH = '@root/userdata/images';
 
@@ -29,11 +30,27 @@ final class Module extends \yii\base\Module
     {
         parent::init();
 
+        $this->defaultRoute = 'data/view';
+
         // init storage
         $storage_path = \Yii::getAlias(self::STORAGE_PATH);
         if (!file_exists($storage_path)) {
             FileHelper::createDirectory($storage_path);
         }
     }
+
+    /**
+     * @inheritdoc
+     * @param \yii\web\Application|\yii\console\Application $app
+     */
+    public function bootstrap($app): void
+    {
+        if ($app instanceof \yii\web\Application) {
+            $app->getUrlManager()->addRules([
+                "{$this->id}/data/view/<filename>" => 'data/view'
+            ], false);
+        }
+    }
+
 
 }

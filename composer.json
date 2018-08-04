@@ -25,6 +25,9 @@
       "imagetool\\": "src"
     }
   },
+  "extra": {
+    "bootstrap": "imagetool\\Module"
+  },
   "config": {
     "process-timeout": 1800,
     "fxp-asset": {
