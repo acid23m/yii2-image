@@ -91,7 +91,7 @@ class DataController extends Controller
         $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + static::CACHE_TIME));
         $response->getHeaders()->remove('Pragma');
 
-        return (string) $image->encode($extension);
+        return $image->encode($extension);
     }
 
 }

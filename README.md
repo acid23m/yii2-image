@@ -41,3 +41,26 @@ Add *userdata/* to **.gitignore**.
     ]
 ]
 ```
+
+Helpers
+-------
+
+- File
+
+```php
+// get full path to image
+echo imagetool\helpers\File::getPath('abc123cde456.jpg');
+
+// get url to image
+// link will look like https://example.com/image-data/abc123cde456.jpg
+echo imagetool\helpers\File::getUrl('abc123cde456.jpg');
+```
+
+- Html
+
+```php
+echo imagetool\helpers\Html::img('abc123cde456.jpg', [
+    'class' => 'img-responsive',
+    'alt' => 'Company logo'
+]);
+```
