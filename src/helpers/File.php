@@ -60,4 +60,34 @@ class File
         return Url::to("@web/image-data/$filename");
     }
 
+    /**
+     * Get mime type from data-uri string.
+     * @param string $data Data-uri
+     * @return null|string
+     */
+    public static function getMimeOfDataUri(string $data): ?string
+    {
+        $data = substr($data, 5); // cut "data:"
+        if ($data === false) {
+            return null;
+        }
+
+        $mime = substr($data, 0, strpos($data, ';'));
+
+        return $mime === false ? null : $mime;
+    }
+
+    /**
+     * Get extension from data-uri string.
+     * @param string $data Data-uri
+     * @return null|string
+     */
+    public static function getExtensionOfDataUri(string $data): ?string
+    {
+        $mime = static::getMimeOfDataUri($data);
+        $mimes = new \Mimey\MimeTypes;
+
+        return $mimes->getExtension($mime);
+    }
+
 }

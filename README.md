@@ -49,11 +49,16 @@ Helpers
 
 ```php
 // get full path to image
-echo imagetool\helpers\File::getPath('abc123cde456.jpg');
+echo imagetool\helpers\File::getPath('abc123cde456.jpg'); // /var/www/site/app/userdata/images/ad/c1/abc123cde456.jpg
 
 // get url to image
-// link will look like https://example.com/image-data/abc123cde456.jpg
-echo imagetool\helpers\File::getUrl('abc123cde456.jpg');
+echo imagetool\helpers\File::getUrl('abc123cde456.jpg'); // https://site.com/image-data/abc123cde456.jpg
+
+// get mime type of image in data-uri format
+echo getMimeOfDataUri('data:image/png;base64,iVBORw0KG'); // image/png
+
+// get extension of image in data-uri format
+echo getExtensionOfDataUri('data:image/png;base64,iVBORw0KG'); // png
 ```
 
 - Html
