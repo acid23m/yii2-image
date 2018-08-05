@@ -200,7 +200,7 @@ class Image extends Component
         $image_save_file = $storage_path . '/' . md5($format . time());
 
         // save temporary
-        $this->getManager()->encode($format, $this->quality)->save($image_save_file, $this->quality);
+        $this->getManager()->encode($format)->save($image_save_file, $this->quality);
         // optimize
         $this->getOptimizer()->optimize($image_save_file);
 

@@ -36,7 +36,6 @@ class DataController extends Controller
      * @throws NotFoundHttpException
      * @throws UnsupportedMediaTypeHttpException
      * @throws \ImageOptimizer\Exception\Exception
-     * @throws \Intervention\Image\Exception\NotWritableException
      */
     public function actionView($filename)
     {
@@ -91,7 +90,7 @@ class DataController extends Controller
         $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + static::CACHE_TIME));
         $response->getHeaders()->remove('Pragma');
 
-        return $image->encode($extension);
+        return (string) $image->getManager()->encode($extension);
     }
 
 }
