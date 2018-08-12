@@ -8,6 +8,7 @@
 
 namespace imagetool\helpers;
 
+use imagetool\components\Image;
 use yii\base\InvalidArgumentException;
 use yii\helpers\Url;
 
@@ -88,6 +89,36 @@ class File
         $mimes = new \Mimey\MimeTypes;
 
         return $mimes->getExtension($mime);
+    }
+
+    /**
+     * Delete image.
+     * @param string $filename
+     * @throws InvalidArgumentException
+     */
+    public static function delete(string $filename): void
+    {
+        $info = pathinfo($filename);
+        $filename = $info['basename'];
+        $ext = $info['extension'];
+        $name = $info['filename'];
+
+        $dpr_postfix = Image::getDprPostfix(Image::DPR_2X);
+        $filename_2 = $name . $dpr_postfix . '.' . $ext;
+
+        $dpr_postfix = Image::getDprPostfix(Image::DPR_3X);
+        $filename_3 = $name . $dpr_postfix . '.' . $ext;
+
+        $image_1 = static::getPath($filename);
+        $image_2 = static::getPath($filename_2);
+        $image_3 = static::getPath($filename_3);
+
+        try {
+            unlink($image_1);
+            unlink($image_2);
+            unlink($image_3);
+        } catch (\Throwable $e) {
+        }
     }
 
 }

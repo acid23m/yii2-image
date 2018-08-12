@@ -55,10 +55,13 @@ echo imagetool\helpers\File::getPath('abc123cde456.jpg'); // /var/www/site/app/u
 echo imagetool\helpers\File::getUrl('abc123cde456.jpg'); // https://site.com/image-data/abc123cde456.jpg
 
 // get mime type of image in data-uri format
-echo getMimeOfDataUri('data:image/png;base64,iVBORw0KG'); // image/png
+echo imagetool\helpers\File::getMimeOfDataUri('data:image/png;base64,iVBORw0KG'); // image/png
 
 // get extension of image in data-uri format
-echo getExtensionOfDataUri('data:image/png;base64,iVBORw0KG'); // png
+echo imagetool\helpers\File::getExtensionOfDataUri('data:image/png;base64,iVBORw0KG'); // png
+
+// delete image
+imagetool\helpers\File::delete('abc123cde456.jpg'); // unlink abc123cde456.jpg, abc123cde456@2x.jpg and abc123cde456@3x.jpg
 ```
 
 - Html

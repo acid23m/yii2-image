@@ -33,6 +33,7 @@ class Image extends Component
     public const DPR_1X = 1;
     public const DPR_2X = 2;
     public const DPR_3X = 3;
+    public const DPR_POSTFIX = '@{dpr}x';
 
     public const FORMAT_JPG = 'jpg';
     public const FORMAT_PNG = 'png';
@@ -142,6 +143,16 @@ class Image extends Component
     }
 
     /**
+     * Image postfix.
+     * @param int $dpr
+     * @return string
+     */
+    public static function getDprPostfix(int $dpr): string
+    {
+        return \str_replace('{dpr}', $dpr, self::DPR_POSTFIX);
+    }
+
+    /**
      * Resize the image for retina display (device pixel ratio).
      * @param int $orig Original DPR
      * @param int $new New DPR
@@ -153,7 +164,8 @@ class Image extends Component
         $current_width = $this->getManager()->width();
         $new_width = (int) ceil($current_width * $ratio);
 
-        $this->image_name .= "@{$new}x";
+        $dpr_postfix = self::getDprPostfix($new);
+        $this->image_name .= $dpr_postfix;
 
         return $this->resizeProportional($new_width, null);
     }

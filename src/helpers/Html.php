@@ -29,26 +29,33 @@ class Html
      */
     public static function img(string $filename, array $options = []): string
     {
-        $filename = pathinfo($filename, PATHINFO_BASENAME);
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        $name = pathinfo($filename, PATHINFO_FILENAME);
+        $info = pathinfo($filename);
+        $filename = $info['basename'];
+        $ext = $info['extension'];
+        $name = $info['filename'];
 
-        $img_1 = File::getUrl($filename);
-        $img_2 = File::getUrl($name . '@' . Image::DPR_2X . 'x.' . $ext);
-        $img_3 = File::getUrl($name . '@' . Image::DPR_3X . 'x.' . $ext);
+        $dpr_postfix = Image::getDprPostfix(Image::DPR_2X);
+        $filename_2 = $name . $dpr_postfix . '.' . $ext;
 
-        $srcset = "$img_1 1x";
+        $dpr_postfix = Image::getDprPostfix(Image::DPR_3X);
+        $filename_3 = $name . $dpr_postfix . '.' . $ext;
 
-        if (file_exists($img_2)) {
-            $srcset .= ", $img_2 2x";
+        $image_1 = File::getUrl($filename);
+        $image_2 = File::getUrl($filename_2);
+        $image_3 = File::getUrl($filename_3);
+
+        $srcset = "$image_1 1x";
+
+        if (file_exists(File::getPath($filename_2))) {
+            $srcset .= ", $image_2 2x";
         }
-        if (file_exists($img_3)) {
-            $srcset .= ", $img_3 3x";
+        if (file_exists(File::getPath($filename_3))) {
+            $srcset .= ", $image_3 3x";
         }
 
         $options = ArrayHelper::merge($options, compact('srcset'));
 
-        return \yii\helpers\Html::img($filename, $options);
+        return \yii\helpers\Html::img($image_1, $options);
     }
 
 }
