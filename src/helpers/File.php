@@ -49,16 +49,21 @@ class File
     /**
      * Get url to image.
      * @param string $filename
+     * @param array $params
      * @return string
      * @throws InvalidArgumentException
      */
-    public static function getUrl(string $filename): string
+    public static function getUrl(string $filename, array $params = []): string
     {
+        $query = '';
+        if (!empty($params)) {
+            $query = '?' . http_build_query($params);
+        }
 //        $module = \imagetool\Module::getInstance();
 //        $module_id = $module !== null ? $module->id : 'imagetool';
 
 //        return Url::to(["$module_id/data/view", 'filename' => $filename]);
-        return Url::to("@web/image-data/$filename");
+        return Url::to("@web/image-data/{$filename}{$query}");
     }
 
     /**

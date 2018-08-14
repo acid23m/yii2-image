@@ -10,6 +10,7 @@ namespace imagetool\controllers\web;
 
 use imagetool\components\Image;
 use imagetool\helpers\File;
+use Intervention\Image\Constraint;
 use yii\base\InvalidArgumentException;
 use yii\helpers\Html;
 use yii\web\Controller;
@@ -39,10 +40,19 @@ class DataController extends Controller
      */
     public function actionView($filename)
     {
-        $filename = Html::encode($filename);
-
         $request = \Yii::$app->getRequest();
         $response = \Yii::$app->getResponse();
+
+        $filename = Html::encode($filename);
+        $width = $request->get('w');
+        if ($width !== null) {
+            $width = (int) $width;
+        }
+        $height = $request->get('h');
+        if ($height !== null) {
+            $height = (int) $height;
+        }
+        $quality = (int) $request->get('q', 100);
 
         $image_path = File::getPath($filename);
         if (!file_exists($image_path)) {
@@ -90,7 +100,34 @@ class DataController extends Controller
         $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + static::CACHE_TIME));
         $response->getHeaders()->remove('Pragma');
 
-        return (string) $image->getManager()->encode($extension);
+        // show original image
+        if ($width === null && $height === null && $quality === 100) {
+            return (string) $image
+                ->getManager()
+                ->encode($extension, $quality);
+        }
+
+        // show image resized on-the-fly
+        /**
+         * @return string
+         */
+        $resize_on_the_fly = function () use ($image, $extension, $width, $height, $quality): string {
+            return (string) $image
+                ->getManager()
+                ->resize($width, $height, function (Constraint $constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->encode($extension, $quality);
+        };
+        // cache small images
+        $cache = \Yii::$app->getCache();
+        if ($width <= 300 && $height <= 300 && $cache !== null) {
+            $cache_key = 'img' . $width . $height . $quality;
+
+            return $cache->getOrSet($cache_key, $resize_on_the_fly, 60);
+        }
+
+        return $resize_on_the_fly();
     }
 
 }
