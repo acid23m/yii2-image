@@ -27,11 +27,11 @@ Usage
 
 Once the extension is installed, do next:
 
-- Storage path is not editable - *@root/userdata/images*.
-Add *userdata/* to **.gitignore**.
+- Storage path is not editable - `@root/userdata/images`.
+Add `userdata/` to **.gitignore**.
 
 
-- Add module (recommended id is *imagetool*) in *backend/config/main.php* and *frontend/config/main.php*.
+- Add module (recommended id is **imagetool**) in `backend/config/main.php` and `frontend/config/main.php`.
 
 ```php
 'modules' => [
