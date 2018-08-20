@@ -19,7 +19,7 @@ use yii\base\BootstrapInterface;
 class Bootstrap implements BootstrapInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @param \yii\web\Application|\yii\console\Application $app
      */
     public function bootstrap($app): void

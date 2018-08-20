@@ -22,7 +22,7 @@ final class Module extends \yii\base\Module
     public const STORAGE_PATH = '@root/userdata/images';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidArgumentException
      */
