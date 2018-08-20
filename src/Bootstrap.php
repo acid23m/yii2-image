@@ -16,7 +16,7 @@ use yii\base\BootstrapInterface;
  * @package imagetool
  * @author Poyarkov S. <webmaster.cipa at gmail dot com>
  */
-class Bootstrap implements BootstrapInterface
+final class Bootstrap implements BootstrapInterface
 {
     /**
      * {@inheritdoc}
