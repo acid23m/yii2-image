@@ -63,7 +63,7 @@ class File
 //        $module_id = $module !== null ? $module->id : 'imagetool';
 
 //        return Url::to(["$module_id/data/view", 'filename' => $filename]);
-        return Url::to("@web/image-data/{$filename}{$query}");
+        return Url::to("@web/image-data/{$filename}{$query}", true);
     }
 
     /**
