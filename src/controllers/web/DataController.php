@@ -122,7 +122,7 @@ class DataController extends Controller
         // cache small images
         $cache = \Yii::$app->getCache();
         if ($width <= 300 && $height <= 300 && $cache !== null) {
-            $cache_key = 'img' . $width . $height . $quality;
+            $cache_key = 'img-' . hash('md4', $filename . $width . $height . $quality);
 
             return $cache->getOrSet($cache_key, $resize_on_the_fly, 60);
         }
