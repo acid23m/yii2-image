@@ -149,23 +149,28 @@ class Image extends Component
      */
     public static function getDprPostfix(int $dpr): string
     {
-        return \str_replace('{dpr}', $dpr, self::DPR_POSTFIX);
+        return $dpr <= 1 ? '' : \str_replace('{dpr}', $dpr, self::DPR_POSTFIX);
     }
 
     /**
      * Resize the image for retina display (device pixel ratio).
      * @param int $orig Original DPR
      * @param int $new New DPR
+     * @param bool $resize Change image size
      * @return ImageLib
      */
-    public function changeDPR(int $orig, int $new): ImageLib
+    public function changeDPR(int $orig, int $new, bool $resize = true): ImageLib
     {
+        $dpr_postfix = self::getDprPostfix($new);
+        $this->image_name .= $dpr_postfix;
+
+        if (!$resize) {
+            return $this->getManager();
+        }
+
         $ratio = $new / $orig;
         $current_width = $this->getManager()->width();
         $new_width = (int) ceil($current_width * $ratio);
-
-        $dpr_postfix = self::getDprPostfix($new);
-        $this->image_name .= $dpr_postfix;
 
         return $this->resizeProportional($new_width, null);
     }
