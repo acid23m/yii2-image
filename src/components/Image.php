@@ -56,7 +56,14 @@ class Image extends Component
         'execute_only_first_png_optimizer' => false,
         'execute_only_first_jpeg_optimizer' => false
     ];
+    /**
+     * @var int Image quality
+     */
     public $quality = 90;
+    /**
+     * @var bool Use image optimizers or not
+     */
+    public $use_optimizer = true;
 
     /**
      * @var ImageLib
@@ -198,7 +205,9 @@ class Image extends Component
         // save
         $this->getManager()->save($image_save_file, $this->quality);
         // optimize
-        $this->getOptimizer()->optimize($image_save_file);
+        if ($this->use_optimizer) {
+            $this->getOptimizer()->optimize($image_save_file);
+        }
 
         return $this->getName() . ".$ext";
     }
@@ -219,7 +228,9 @@ class Image extends Component
         // save temporary
         $this->getManager()->encode($format)->save($image_save_file, $this->quality);
         // optimize
-        $this->getOptimizer()->optimize($image_save_file);
+        if ($this->use_optimizer) {
+            $this->getOptimizer()->optimize($image_save_file);
+        }
 
         $image_manager = new ImageManager(['driver' => 'imagick']);
         $image = $image_manager->make($image_save_file);
