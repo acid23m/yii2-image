@@ -10,6 +10,7 @@ namespace imagetool\helpers;
 
 use imagetool\components\Image;
 use yii\base\InvalidArgumentException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /**
@@ -62,7 +63,10 @@ class File
 //        $module = \imagetool\Module::getInstance();
 //        $module_id = $module !== null ? $module->id : 'imagetool';
 
-//        return Url::to(["$module_id/data/view", 'filename' => $filename]);
+//        return Url::to(
+//            ArrayHelper::merge(["/$module_id/data/view", 'filename' => $filename], $params),
+//            true
+//        );
         return Url::to("@web/image-data/{$filename}{$query}", true);
     }
 
