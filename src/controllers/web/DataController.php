@@ -27,8 +27,6 @@ use yii\web\View;
  */
 class DataController extends Controller
 {
-    protected const CACHE_TIME = 86400;
-
     /**
      * Show image.
      * @param string $filename
@@ -92,12 +90,14 @@ class DataController extends Controller
             }
         }
 
+        $browser_cache_time = \imagetool\Module::getInstance()->browser_cache_time;
+
         $response->format = Response::FORMAT_RAW;
         $response->getHeaders()->set('Content-Type', $mime);
 //        $response->getHeaders()->set('Content-Length', $size); // wrong because of gzip
         $response->getHeaders()->set('Last-Modified', gmdate(DATE_RFC7231, $mtime));
-        $response->getHeaders()->set('Cache-Control', 'public, max-age=' . static::CACHE_TIME . ', must-revalidate');
-        $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + static::CACHE_TIME));
+        $response->getHeaders()->set('Cache-Control', "public, max-age=$browser_cache_time, must-revalidate");
+        $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + $browser_cache_time));
         $response->getHeaders()->remove('Pragma');
 
         // show original image

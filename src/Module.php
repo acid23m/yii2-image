@@ -22,6 +22,11 @@ final class Module extends \yii\base\Module
     public const STORAGE_PATH = '@root/userdata/images';
 
     /**
+     * @var int Client cache time in seconds
+     */
+    public $browser_cache_time = 2592000; // 1 month
+
+    /**
      * {@inheritdoc}
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidArgumentException

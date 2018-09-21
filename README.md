@@ -37,7 +37,8 @@ Add `userdata/` to **.gitignore**.
 'modules' => [
     'imagetool' => [
         'class' => \imagetool\Module::class,
-        'controllerNamespace' => 'imagetool\controllers\web'
+        'controllerNamespace' => 'imagetool\controllers\web',
+        //'browser_cache_time' => 60
     ]
 ]
 ```
