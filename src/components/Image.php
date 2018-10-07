@@ -97,9 +97,13 @@ class Image extends Component
         $this->image_optimizer = $opt_factory->get();
 
         // set image filename
-        $this->image_name = md5(
+        /*$this->image_name = md5(
             ((string) $this->getManager())
             . time()
+        );*/
+        $this->image_name = md5(
+            time()
+            . \random_int(0, 10000)
         );
     }
 
