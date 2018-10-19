@@ -60,8 +60,8 @@ class File
         if (!empty($params)) {
             $query = '?' . http_build_query($params);
         }
-//        $module = \imagetool\Module::getInstance();
-//        $module_id = $module !== null ? $module->id : 'imagetool';
+        $module = \imagetool\Module::getInstance();
+        $module_id = $module !== null ? $module->id : \imagetool\Module::DEFAULT_ID;
 
 //        return Url::to(
 //            ArrayHelper::merge(["/$module_id/data/view", 'filename' => $filename], $params),
