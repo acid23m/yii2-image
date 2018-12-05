@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```bash
-php composer.phar require --prefer-dist acid23m/yii2-image "dev-master"
+php composer.phar require --prefer-dist acid23m/yii2-image "~1.0"
 ```
 
 or add
 
 ```
-"acid23m/yii2-image": "dev-master"
+"acid23m/yii2-image": "~1.0"
 ```
 
 to the require section of your `composer.json` file.
@@ -46,28 +46,34 @@ Add `userdata/` to **.gitignore**.
 Helpers
 -------
 
-- File
+### File
 
 ```php
 // get full path to image
-echo imagetool\helpers\File::getPath('abc123cde456.jpg'); // /var/www/site/app/userdata/images/ad/c1/abc123cde456.jpg
+// output: /var/www/site/app/userdata/images/ad/c1/abc123cde456.jpg
+echo imagetool\helpers\File::getPath('abc123cde456.jpg');
 
 // get url to image
-echo imagetool\helpers\File::getUrl('abc123cde456.jpg'); // https://site.com/image-data/abc123cde456.jpg
+// output: https://site.com/image-data/abc123cde456.jpg
+echo imagetool\helpers\File::getUrl('abc123cde456.jpg');
 
 // get mime type of image in data-uri format
-echo imagetool\helpers\File::getMimeOfDataUri('data:image/png;base64,iVBORw0KG'); // image/png
+// output: image/png
+echo imagetool\helpers\File::getMimeOfDataUri('data:image/png;base64,iVBORw0KG');
 
 // get extension of image in data-uri format
-echo imagetool\helpers\File::getExtensionOfDataUri('data:image/png;base64,iVBORw0KG'); // png
+// output: png
+echo imagetool\helpers\File::getExtensionOfDataUri('data:image/png;base64,iVBORw0KG');
 
 // delete image
-imagetool\helpers\File::delete('abc123cde456.jpg'); // unlink abc123cde456.jpg, abc123cde456@2x.jpg and abc123cde456@3x.jpg
+// unlink abc123cde456.jpg, abc123cde456@2x.jpg and abc123cde456@3x.jpg
+imagetool\helpers\File::delete('abc123cde456.jpg');
 ```
 
-- Html
+### Html
 
 ```php
+// output: <img />
 echo imagetool\helpers\Html::img('abc123cde456.jpg', [
     'class' => 'img-responsive',
     'alt' => 'Company logo'
