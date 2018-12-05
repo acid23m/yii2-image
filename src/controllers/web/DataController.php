@@ -53,7 +53,7 @@ class DataController extends Controller
         $quality = (int) $request->get('q', 100);
 
         $image_path = File::getPath($filename);
-        if (!file_exists($image_path)) {
+        if (!\file_exists($image_path)) {
             throw new NotFoundHttpException('File not found.');
         }
 
@@ -70,7 +70,7 @@ class DataController extends Controller
         }
 
         $size = (int) $image->getManager()->filesize();
-        $mtime = filemtime($image_path);
+        $mtime = \filemtime($image_path);
 
         // check client cache
         if ($request->getHeaders()->has('If-Modified-Since')) {
@@ -122,7 +122,7 @@ class DataController extends Controller
         // cache small images
         $cache = \Yii::$app->getCache();
         if ($width <= 300 && $height <= 300 && $cache !== null) {
-            $cache_key = 'img-' . hash('md4', $filename . $width . $height . $quality);
+            $cache_key = 'img-' . \hash('md4', $filename . $width . $height . $quality);
 
             return $cache->getOrSet($cache_key, $resize_on_the_fly, 60);
         }

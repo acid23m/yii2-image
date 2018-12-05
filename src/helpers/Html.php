@@ -29,7 +29,7 @@ class Html
      */
     public static function img(string $filename, array $options = []): string
     {
-        $info = pathinfo($filename);
+        $info = \pathinfo($filename);
         $filename = $info['basename'];
         $ext = $info['extension'];
         $name = $info['filename'];
@@ -63,13 +63,13 @@ class Html
         $image_params = function (int $dpr) use ($width, $height, $quality): array {
             $params = [];
             if ($width !== null) {
-                $params['w'] = abs($width) * $dpr;
+                $params['w'] = \abs($width) * $dpr;
             }
             if ($height !== null) {
-                $params['h'] = abs($height) * $dpr;
+                $params['h'] = \abs($height) * $dpr;
             }
             if ($quality !== null) {
-                $params['q'] = abs($quality);
+                $params['q'] = \abs($quality);
             }
 
             return $params;
@@ -81,14 +81,14 @@ class Html
 
         $srcset = "$image_1 1x";
 
-        if (file_exists(File::getPath($filename_2))) {
+        if (\file_exists(File::getPath($filename_2))) {
             $srcset .= ", $image_2 2x";
         }
-        if (file_exists(File::getPath($filename_3))) {
+        if (\file_exists(File::getPath($filename_3))) {
             $srcset .= ", $image_3 3x";
         }
 
-        $options = ArrayHelper::merge($options, compact('srcset'));
+        $options = ArrayHelper::merge($options, \compact('srcset'));
 
         return \yii\helpers\Html::img($image_1, $options);
     }

@@ -39,7 +39,7 @@ final class Module extends \yii\base\Module
 
         // init storage
         $storage_path = \Yii::getAlias(self::STORAGE_PATH);
-        if (!file_exists($storage_path)) {
+        if (!\file_exists($storage_path)) {
             FileHelper::createDirectory($storage_path);
         }
     }

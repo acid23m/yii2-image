@@ -10,7 +10,6 @@ namespace imagetool\helpers;
 
 use imagetool\components\Image;
 use yii\base\InvalidArgumentException;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /**
@@ -42,7 +41,7 @@ class File
      */
     public static function getPath(string $filename): string
     {
-        return rtrim(\Yii::getAlias(\imagetool\Module::STORAGE_PATH), '/')
+        return \rtrim(\Yii::getAlias(\imagetool\Module::STORAGE_PATH), '/')
             . '/' . static::defineDir($filename)
             . '/' . $filename;
     }
@@ -58,7 +57,7 @@ class File
     {
         $query = '';
         if (!empty($params)) {
-            $query = '?' . http_build_query($params);
+            $query = '?' . \http_build_query($params);
         }
         $module = \imagetool\Module::getInstance();
         $module_id = $module !== null ? $module->id : \imagetool\Module::DEFAULT_ID;
@@ -77,12 +76,12 @@ class File
      */
     public static function getMimeOfDataUri(string $data): ?string
     {
-        $data = substr($data, 5); // cut "data:"
+        $data = \substr($data, 5); // cut "data:"
         if ($data === false) {
             return null;
         }
 
-        $mime = substr($data, 0, strpos($data, ';'));
+        $mime = \substr($data, 0, \strpos($data, ';'));
 
         return $mime === false ? null : $mime;
     }
@@ -107,7 +106,7 @@ class File
      */
     public static function delete(string $filename): void
     {
-        $info = pathinfo($filename);
+        $info = \pathinfo($filename);
         $filename = $info['basename'];
         $ext = $info['extension'];
         $name = $info['filename'];
@@ -123,9 +122,9 @@ class File
         $image_3 = static::getPath($filename_3);
 
         try {
-            unlink($image_1);
-            unlink($image_2);
-            unlink($image_3);
+            \unlink($image_1);
+            \unlink($image_2);
+            \unlink($image_3);
         } catch (\Throwable $e) {
         }
     }

@@ -102,7 +102,7 @@ class Image extends Component
             . time()
         );*/
         $this->image_name = md5(
-            time()
+            \time()
             . \random_int(0, 10000)
         );
     }
@@ -181,7 +181,7 @@ class Image extends Component
 
         $ratio = $new / $orig;
         $current_width = $this->getManager()->width();
-        $new_width = (int) ceil($current_width * $ratio);
+        $new_width = (int) \ceil($current_width * $ratio);
 
         return $this->resizeProportional($new_width, null);
     }
@@ -198,9 +198,9 @@ class Image extends Component
     public function save(string $ext): string
     {
         // create directory
-        $storage_path = rtrim(\Yii::getAlias(\imagetool\Module::STORAGE_PATH), '/');
+        $storage_path = \rtrim(\Yii::getAlias(\imagetool\Module::STORAGE_PATH), '/');
         $image_save_path = $storage_path . '/' . $this->getDir();
-        if (!file_exists($image_save_path)) {
+        if (!\file_exists($image_save_path)) {
             FileHelper::createDirectory($image_save_path);
         }
 
@@ -226,8 +226,8 @@ class Image extends Component
      */
     public function encode(string $format): string
     {
-        $storage_path = rtrim(sys_get_temp_dir(), '/');
-        $image_save_file = $storage_path . '/' . md5($format . time());
+        $storage_path = \rtrim(\sys_get_temp_dir(), '/');
+        $image_save_file = $storage_path . '/' . \md5($format . \time());
 
         // save temporary
         $this->getManager()->encode($format)->save($image_save_file, $this->quality);
@@ -239,7 +239,7 @@ class Image extends Component
         $image_manager = new ImageManager(['driver' => 'imagick']);
         $image = $image_manager->make($image_save_file);
 
-        unlink($image_save_file);
+        \unlink($image_save_file);
 
         return (string) $image->encode($format);
     }
