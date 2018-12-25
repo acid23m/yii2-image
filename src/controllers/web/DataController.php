@@ -71,9 +71,10 @@ class DataController extends Controller
 
         $size = (int) $image->getManager()->filesize();
         $mtime = \filemtime($image_path);
+        $hash = \hash('md4', $mtime);
 
         // check client cache
-        if ($request->getHeaders()->has('If-Modified-Since')) {
+        if ($request->getHeaders()->has('If-Modified-Since')) { // by last modified
             try {
                 $if_modified_since = \DateTime::createFromFormat(
                     DATE_RFC7231,
@@ -90,7 +91,20 @@ class DataController extends Controller
             }
         }
 
+        if ($request->getHeaders()->has('If-None-Match')) { // by etag
+            $etag = $request->getHeaders()->get('If-None-Match');
+
+            if ($hash === $etag) {
+                $response->setStatusCode(304);
+
+                return null;
+            }
+        }
+
+
         $browser_cache_time = \imagetool\Module::getInstance()->browser_cache_time;
+        $use_etag = \imagetool\Module::getInstance()->etag;
+        $unset_cookie = \imagetool\Module::getInstance()->unset_cookie;
 
         $response->format = Response::FORMAT_RAW;
         $response->getHeaders()->set('Content-Type', $mime);
@@ -99,6 +113,12 @@ class DataController extends Controller
         $response->getHeaders()->set('Cache-Control', "public, max-age=$browser_cache_time, must-revalidate");
         $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + $browser_cache_time));
         $response->getHeaders()->remove('Pragma');
+        if ($use_etag) {
+            $response->getHeaders()->set('ETag', $hash);
+        }
+        if ($unset_cookie) {
+            $response->getCookies()->removeAll();
+        }
 
         // show original image
         if ($width === null && $height === null && $quality === 100) {

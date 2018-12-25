@@ -25,6 +25,14 @@ final class Module extends \yii\base\Module
      * @var int Client cache time in seconds
      */
     public $browser_cache_time = 2592000; // 1 month
+    /**
+     * @var bool Set ETag header
+     */
+    public $etag = true;
+    /**
+     * @var bool Remove Set-Cookie header
+     */
+    public $unset_cookie = true;
 
     /**
      * {@inheritdoc}
