@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Poyarkov S. <webmaster.cipa at gmail dot com>
- * Date: 01.08.18
- * Time: 12:30
- */
 
 namespace imagetool\components;
 
@@ -101,7 +95,7 @@ class Image extends Component
             ((string) $this->getManager())
             . time()
         );*/
-        $this->image_name = md5(
+        $this->image_name = \md5(
             \time()
             . \random_int(0, 10000)
         );
@@ -148,7 +142,7 @@ class Image extends Component
      */
     public function resizeProportional(?int $width, ?int $height): ImageLib
     {
-        return $this->getManager()->resize($width, $height, function (Constraint $constraint) {
+        return $this->getManager()->resize($width, $height, static function (Constraint $constraint) {
             $constraint->aspectRatio();
         });
     }
@@ -190,7 +184,6 @@ class Image extends Component
      * Save image file.
      * @param string $ext File extension
      * @return string Image filename
-     * @throws \ImageOptimizer\Exception\Exception
      * @throws NotWritableException
      * @throws Exception
      * @throws InvalidArgumentException
@@ -210,7 +203,10 @@ class Image extends Component
         $this->getManager()->save($image_save_file, $this->quality);
         // optimize
         if ($this->use_optimizer) {
-            $this->getOptimizer()->optimize($image_save_file);
+            try {
+                $this->getOptimizer()->optimize($image_save_file);
+            } catch (\ImageOptimizer\Exception\Exception $e) {
+            }
         }
 
         return $this->getName() . ".$ext";
@@ -220,7 +216,6 @@ class Image extends Component
      * Get image source.
      * @param string $format
      * @return string
-     * @throws \ImageOptimizer\Exception\Exception
      * @throws NotWritableException
      * @link http://image.intervention.io/api/encode
      */
@@ -233,7 +228,10 @@ class Image extends Component
         $this->getManager()->encode($format)->save($image_save_file, $this->quality);
         // optimize
         if ($this->use_optimizer) {
-            $this->getOptimizer()->optimize($image_save_file);
+            try {
+                $this->getOptimizer()->optimize($image_save_file);
+            } catch (\ImageOptimizer\Exception\Exception $e) {
+            }
         }
 
         $image_manager = new ImageManager(['driver' => 'imagick']);

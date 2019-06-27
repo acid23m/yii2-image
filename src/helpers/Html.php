@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Poyarkov S. <webmaster.cipa at gmail dot com>
- * Date: 05.08.18
- * Time: 12:15
- */
 
 namespace imagetool\helpers;
 
@@ -21,7 +15,7 @@ use yii\helpers\ArrayHelper;
 class Html
 {
     /**
-     * Render html image tag with srcset attribute.
+     * Renders html image tag with srcset attribute.
      * @param string $filename Image name
      * @param array $options Image tag options
      * @return string Html markup
@@ -60,7 +54,7 @@ class Html
          * @param int $dpr
          * @return array
          */
-        $image_params = function (int $dpr) use ($width, $height, $quality): array {
+        $image_params = static function (int $dpr) use ($width, $height, $quality): array {
             $params = [];
             if ($width !== null) {
                 $params['w'] = \abs($width) * $dpr;

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Poyarkov S. <webmaster.cipa at gmail dot com>
- * Date: 02.08.18
- * Time: 2:53
- */
 
 namespace imagetool\helpers;
 
@@ -30,11 +24,11 @@ class File
         $dir_1 = $filename[0] . $filename[1];
         $dir_2 = $filename[2] . $filename[3];
 
-        return $dir_1 . '/' . $dir_2;
+        return "$dir_1/$dir_2";
     }
 
     /**
-     * Get full path to image.
+     * Gets full path to image.
      * @param string $filename
      * @return string
      * @throws InvalidArgumentException
@@ -47,7 +41,7 @@ class File
     }
 
     /**
-     * Get url to image.
+     * Gets url to image.
      * @param string $filename
      * @param array $params
      * @return string
@@ -70,7 +64,7 @@ class File
     }
 
     /**
-     * Get mime type from data-uri string.
+     * Gets mime type from data-uri string.
      * @param string $data Data-uri
      * @return null|string
      */
@@ -87,7 +81,7 @@ class File
     }
 
     /**
-     * Get extension from data-uri string.
+     * Gets extension from data-uri string.
      * @param string $data Data-uri
      * @return null|string
      */
@@ -100,7 +94,7 @@ class File
     }
 
     /**
-     * Delete image.
+     * Deletes image.
      * @param string $filename
      * @throws InvalidArgumentException
      */

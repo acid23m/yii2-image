@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Poyarkov S. <webmaster.cipa at gmail dot com>
- * Date: 02.08.18
- * Time: 3:07
- */
 
 namespace imagetool\controllers\web;
 
@@ -28,13 +22,14 @@ use yii\web\View;
 class DataController extends Controller
 {
     /**
-     * Show image.
+     * Shows image.
      * @param string $filename
      * @return null|string|View
      * @throws InvalidArgumentException
      * @throws NotFoundHttpException
      * @throws UnsupportedMediaTypeHttpException
      * @throws \ImageOptimizer\Exception\Exception
+     * @throws \yii\base\InvalidCallException
      */
     public function actionView($filename)
     {
@@ -73,7 +68,7 @@ class DataController extends Controller
         $mtime = \filemtime($image_path);
         $hash = \hash('md4', $mtime);
 
-        // check client cache
+        // checks client cache
         if ($request->getHeaders()->has('If-Modified-Since')) { // by last modified
             try {
                 $if_modified_since = \DateTime::createFromFormat(
@@ -120,14 +115,14 @@ class DataController extends Controller
             $response->getCookies()->removeAll();
         }
 
-        // show original image
+        // shows original image
         if ($width === null && $height === null && $quality === 100) {
             return (string) $image
                 ->getManager()
                 ->encode($extension, $quality);
         }
 
-        // show image resized on-the-fly
+        // shows image resized on-the-fly
         /**
          * @return string
          */
@@ -139,7 +134,7 @@ class DataController extends Controller
                 })
                 ->encode($extension, $quality);
         };
-        // cache small images
+        // caches small images
         $cache = \Yii::$app->getCache();
         if ($width <= 300 && $height <= 300 && $cache !== null) {
             $cache_key = 'img-' . \hash('md4', $filename . $width . $height . $quality);

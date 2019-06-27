@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Poyarkov S. <webmaster.cipa at gmail dot com>
- * Date: 05.08.18
- * Time: 0:26
- */
 
 namespace imagetool;
 
