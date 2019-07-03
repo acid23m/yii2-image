@@ -25,8 +25,16 @@ class Html
     {
         $info = \pathinfo($filename);
         $filename = $info['basename'];
-        $ext = $info['extension'];
+        $extension = $info['extension'];
         $name = $info['filename'];
+
+        // svg
+        if ($extension === 'svg') {
+            return \yii\helpers\Html::img(
+                File::getUrl($filename),
+                $options
+            );
+        }
 
         $width = null;
         if (isset($options['width'])) {
@@ -45,10 +53,10 @@ class Html
         }
 
         $dpr_postfix = Image::getDprPostfix(Image::DPR_2X);
-        $filename_2 = $name . $dpr_postfix . '.' . $ext;
+        $filename_2 = $name . $dpr_postfix . '.' . $extension;
 
         $dpr_postfix = Image::getDprPostfix(Image::DPR_3X);
-        $filename_3 = $name . $dpr_postfix . '.' . $ext;
+        $filename_3 = $name . $dpr_postfix . '.' . $extension;
 
         /**
          * @param int $dpr

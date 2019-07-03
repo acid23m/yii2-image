@@ -5,6 +5,7 @@ namespace imagetool\controllers\web;
 use imagetool\components\Image;
 use imagetool\helpers\File;
 use Intervention\Image\Constraint;
+use Mimey\MimeTypes;
 use yii\base\InvalidArgumentException;
 use yii\helpers\Html;
 use yii\web\Controller;
@@ -33,38 +34,31 @@ class DataController extends Controller
      */
     public function actionView($filename)
     {
-        $request = \Yii::$app->getRequest();
-        $response = \Yii::$app->getResponse();
-
         $filename = Html::encode($filename);
-        $width = $request->get('w');
-        if ($width !== null) {
-            $width = (int) $width;
-        }
-        $height = $request->get('h');
-        if ($height !== null) {
-            $height = (int) $height;
-        }
-        $quality = (int) $request->get('q', 100);
-
         $image_path = File::getPath($filename);
         if (!\file_exists($image_path)) {
             throw new NotFoundHttpException('File not found.');
         }
 
-        $image = new Image($image_path);
-
-        $mime = $image->getManager()->mime();
-        if ($mime === '' || $mime === null) {
-            throw new UnsupportedMediaTypeHttpException('Can\'t find mime type by given extension.');
-        }
-
-        $extension = $image->getManager()->extension;
+        $extension = \pathinfo($filename, PATHINFO_EXTENSION);
         if ($extension === 'jpeg') {
             $extension = Image::FORMAT_JPG;
         }
 
-        $size = (int) $image->getManager()->filesize();
+        $mime = (new MimeTypes)->getMimeType($extension);
+        if ($mime === '' || $mime === null) {
+            throw new UnsupportedMediaTypeHttpException('Can\'t find mime type by given extension.');
+        }
+
+        try {
+            $size = \filesize($image_path);
+        } catch (\Exception $e) {
+            $size = false;
+        }
+
+        $request = \Yii::$app->getRequest();
+        $response = \Yii::$app->getResponse();
+
         $mtime = \filemtime($image_path);
         $hash = \hash('md4', $mtime);
 
@@ -96,17 +90,19 @@ class DataController extends Controller
             }
         }
 
-
+        // prepare response
         $browser_cache_time = \imagetool\Module::getInstance()->browser_cache_time;
         $use_etag = \imagetool\Module::getInstance()->etag;
         $unset_cookie = \imagetool\Module::getInstance()->unset_cookie;
 
         $response->format = Response::FORMAT_RAW;
         $response->getHeaders()->set('Content-Type', $mime);
-//        $response->getHeaders()->set('Content-Length', $size); // wrong because of gzip
-        $response->getHeaders()->set('Last-Modified', gmdate(DATE_RFC7231, $mtime));
+//        if ($size !== false) {
+//            $response->getHeaders()->set('Content-Length', $size); // wrong because of gzip and resizing
+//        }
+        $response->getHeaders()->set('Last-Modified', \gmdate(DATE_RFC7231, $mtime));
         $response->getHeaders()->set('Cache-Control', "public, max-age=$browser_cache_time, must-revalidate");
-        $response->getHeaders()->set('Expires', gmdate(DATE_RFC7231, $mtime + $browser_cache_time));
+        $response->getHeaders()->set('Expires', \gmdate(DATE_RFC7231, $mtime + $browser_cache_time));
         $response->getHeaders()->remove('Pragma');
         if ($use_etag) {
             $response->getHeaders()->set('ETag', $hash);
@@ -115,6 +111,25 @@ class DataController extends Controller
             $response->getCookies()->removeAll();
         }
 
+
+        // svg
+        if ($extension === 'svg') {
+            return \file_get_contents($image_path);
+        }
+
+
+        $image = new Image($image_path);
+
+        $width = $request->get('w');
+        if ($width !== null) {
+            $width = (int) $width;
+        }
+        $height = $request->get('h');
+        if ($height !== null) {
+            $height = (int) $height;
+        }
+        $quality = (int) $request->get('q', 100);
+
         // shows original image
         if ($width === null && $height === null && $quality === 100) {
             return (string) $image
@@ -122,14 +137,14 @@ class DataController extends Controller
                 ->encode($extension, $quality);
         }
 
-        // shows image resized on-the-fly
+        // shows resized on-the-fly image
         /**
          * @return string
          */
-        $resize_on_the_fly = function () use ($image, $extension, $width, $height, $quality): string {
+        $resize_on_the_fly = static function () use ($image, $extension, $width, $height, $quality): string {
             return (string) $image
                 ->getManager()
-                ->resize($width, $height, function (Constraint $constraint) {
+                ->resize($width, $height, static function (Constraint $constraint) {
                     $constraint->aspectRatio();
                 })
                 ->encode($extension, $quality);

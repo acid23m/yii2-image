@@ -15,7 +15,8 @@ use yii\base\InvalidArgumentException;
 use yii\helpers\FileHelper;
 
 /**
- * Class Image.
+ * Manipulates images.
+ * Works only with raster graphics.
  *
  * @package imagetool\components
  * @author Poyarkov S. <webmaster.cipa at gmail dot com>
